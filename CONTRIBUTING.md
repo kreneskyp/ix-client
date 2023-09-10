@@ -1,6 +1,6 @@
 # How to develop on this project
 
-ix_client welcomes contributions from the community.
+Agent IX welcomes contributions from the community.
 
 **You need PYTHON3!**
 

@@ -17,9 +17,9 @@ echo "Description: $description";
 echo "Renaming project..."
 
 original_author="kreneskyp"
-original_name="ix_client"
-original_urlname="ix-client"
-original_description="Awesome ix_client created by kreneskyp"
+original_name="agent_ix"
+original_urlname="agent-ix"
+original_description="Awesome agent_ix created by kreneskyp"
 # for filename in $(find . -name "*.*") 
 for filename in $(git ls-files) 
 do
