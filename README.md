@@ -1,11 +1,26 @@
 
-# Python Project Template
+# Agent IX Client
 
-A low dependency and really simple to start project template for Python Projects.
+This is the client and runner for the IX agent platform. This tool is intended to start the agent service using docker
+images published by the main IX project.
 
-See also 
-- [Flask-Project-Template](https://github.com/rochacbruno/flask-project-template/) for a full feature Flask project including database, API, admin interface, etc.
-- [FastAPI-Project-Template](https://github.com/rochacbruno/fastapi-project-template/) The base to start an openapi project featuring: SQLModel, Typer, FastAPI, JWT Token Auth, Interactive Shell, Management Commands.
+Visit [Agent IX](http://github.com/kreneskyp/ix) project site for more details.
+
+## Install 
+
+```
+pip install agent-ix
+```
+
+TODO: ENV setup
+
+## Usage
+
+```
+ix server up
+```
+
+
 
 ### HOW TO USE THIS TEMPLATE
 
@@ -40,7 +55,7 @@ See also
 - ✅ Code linting using [flake8](https://flake8.pycqa.org/en/latest/)
 - 📊 Code coverage reports using [codecov](https://about.codecov.io/sign-up/)
 - 🛳️ Automatic release to [PyPI](https://pypi.org) using [twine](https://twine.readthedocs.io/en/latest/) and github actions.
-- 🎯 Entry points to execute your program using `python -m <ix_client>` or `$ ix_client` with basic CLI argument parsing.
+- 🎯 Entry points to execute your program using `python -m <agent_ix>` or `$ agent_ix` with basic CLI argument parsing.
 - 🔄 Continuous integration using [Github Actions](.github/workflows/) with jobs to lint, test and release your project on Linux, Mac and Windows environments.
 
 > Curious about architectural decisions on this template? read [ABOUT_THIS_TEMPLATE.md](ABOUT_THIS_TEMPLATE.md)  
@@ -51,33 +66,33 @@ See also
 <!--  DELETE THE LINES ABOVE THIS AND WRITE YOUR PROJECT README BELOW -->
 
 ---
-# ix_client
+# agent_ix
 
 [![codecov](https://codecov.io/gh/kreneskyp/ix-client/branch/main/graph/badge.svg?token=ix-client_token_here)](https://codecov.io/gh/kreneskyp/ix-client)
 [![CI](https://github.com/kreneskyp/ix-client/actions/workflows/main.yml/badge.svg)](https://github.com/kreneskyp/ix-client/actions/workflows/main.yml)
 
-Awesome ix_client created by kreneskyp
+Awesome agent_ix created by kreneskyp
 
 ## Install it from PyPI
 
 ```bash
-pip install ix_client
+pip install agent_ix
 ```
 
 ## Usage
 
 ```py
-from ix_client import BaseClass
-from ix_client import base_function
+from agent_ix import BaseClass
+from agent_ix import base_function
 
 BaseClass().base_method()
 base_function()
 ```
 
 ```bash
-$ python -m ix_client
+$ python -m agent_ix
 #or
-$ ix_client
+$ agent_ix
 ```
 
 ## Development

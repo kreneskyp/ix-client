@@ -1,4 +1,4 @@
-"""CLI interface for ix_client project.
+"""CLI interface for agent_ix project.
 
 Be creative! do whatever you want!
 
@@ -12,7 +12,7 @@ Be creative! do whatever you want!
 def main():  # pragma: no cover
     """
     The main function executes on commands:
-    `python -m ix_client` and `$ ix_client `.
+    `python -m agent_ix` and `$ agent_ix `.
 
     This is your program's entry point.
 

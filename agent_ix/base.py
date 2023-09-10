@@ -1,7 +1,7 @@
 """
-ix_client base module.
+agent_ix base module.
 
-This is the principal module of the ix_client project.
+This is the principal module of the agent_ix project.
 here you put your main classes and objects.
 
 Be creative! do whatever you want!
@@ -14,4 +14,4 @@ and then choose `flask` as template.
 """
 
 # example constant variable
-NAME = "ix_client"
+NAME = "agent_ix"
