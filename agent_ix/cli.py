@@ -4,7 +4,9 @@ import subprocess
 import pkg_resources
 
 
-DOCKER_COMPOSE_PATH = pkg_resources.resource_filename("agent_ix", "docker-compose.yml")
+DOCKER_COMPOSE_PATH = pkg_resources.resource_filename(
+    "agent_ix", "docker-compose.yml"
+)
 IX_ENV_TEMPLATE = pkg_resources.resource_filename("agent_ix", "ix.env")
 CWD = os.getcwd()
 IX_ENV_PATH = os.path.join(CWD, "ix.env")
@@ -32,7 +34,9 @@ def get_env():
 
 def run_docker_compose_command(subcommand, *args, **kwargs):
     env = get_env()
-    cmd = ["docker-compose", "-f", DOCKER_COMPOSE_PATH, subcommand] + list(args)
+    cmd = ["docker-compose", "-f", DOCKER_COMPOSE_PATH, subcommand] + list(
+        args
+    )
     subprocess.run(cmd, env=env)
 
 
@@ -84,7 +88,8 @@ def setup(args):
     run_manage_py_command("loaddata", "fake_user")
     run_manage_py_command("loaddata", "node_types")
     run_manage_py_command(
-        "loaddata", "ix_v2 code_v2 pirate_v1 wikipedia_v1 klarna_v1 bot_smith_v1"
+        "loaddata",
+        "ix_v2 code_v2 pirate_v1 wikipedia_v1 klarna_v1 bot_smith_v1",
     )
 
 
@@ -99,13 +104,16 @@ def main():
     )
 
     # 'up' subcommand
-    parser_up = subparsers.add_parser("up", help="Start services in the background")
+    parser_up = subparsers.add_parser(
+        "up", help="Start services in the background"
+    )
     # parser_up.add_argument('version', help='Version to load (e.g. 0.1)', default="latest")
     parser_up.set_defaults(func=up)
 
     # 'down' subcommand
     parser_down = subparsers.add_parser(
-        "down", help="Stop and remove containers, networks, images, and volumes"
+        "down",
+        help="Stop and remove containers, networks, images, and volumes",
     )
     parser_down.set_defaults(func=down)
 
@@ -118,7 +126,8 @@ def main():
 
     # 'log' subcommand
     parser_log = subparsers.add_parser(
-        "log", help="View output from containers [worker, web, nginx, db, redis]"
+        "log",
+        help="View output from containers [worker, web, nginx, db, redis]",
     )
     parser_log.add_argument(
         "services", nargs="+", help="Names of the services to show logs for"
