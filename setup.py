@@ -40,7 +40,10 @@ setup(
     packages=find_packages(exclude=["tests", ".github"]),
     install_requires=read_requirements("requirements.txt"),
     entry_points={
-        "console_scripts": ["agent_ix = agent_ix.__main__:main"]
+        "console_scripts": ["ix = agent_ix.__main__:main"]
+    },
+    package_data={
+        'agent_ix': ['docker-compose.yml', 'nginx.conf', 'ix.env'],
     },
     extras_require={"test": read_requirements("requirements-test.txt")},
 )
