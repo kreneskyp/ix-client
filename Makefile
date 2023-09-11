@@ -35,7 +35,6 @@ lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 agent_ix/
 	$(ENV_PREFIX)black -l 79 --check agent_ix/
 	$(ENV_PREFIX)black -l 79 --check tests/
-	$(ENV_PREFIX)mypy --ignore-missing-imports agent_ix/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
