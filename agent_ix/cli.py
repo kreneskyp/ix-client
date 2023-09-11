@@ -55,8 +55,8 @@ def run_manage_py_command(subcommand, *args):
 
 
 def up(args):
-    # destroy static on each startup so that it is always pulled fresh from the container
-    # this avoids stale files from a version prior to what is running.
+    # destroy static on each startup so that it is always pulled fresh from the
+    # container this avoids stale files from a version prior to what is running.
     subprocess.run(["docker", "volume", "rm", "agent_ix_static"])
     run_docker_compose_command(
         "up",
@@ -107,7 +107,8 @@ def main():
     parser_up = subparsers.add_parser(
         "up", help="Start services in the background"
     )
-    # parser_up.add_argument('version', help='Version to load (e.g. 0.1)', default="latest")
+    # parser_up.add_argument('version', help='Version to load (e.g. 0.1)',
+    # default="latest")
     parser_up.set_defaults(func=up)
 
     # 'down' subcommand
