@@ -9,6 +9,12 @@ DOCKER_COMPOSE_PATH = pkg_resources.resource_filename("agent_ix", "docker-compos
 IX_ENV_TEMPLATE = pkg_resources.resource_filename("agent_ix", "ix.env")
 CWD = os.getcwd()
 IX_ENV_PATH = os.path.join(CWD, "ix.env")
+IX_INIT = os.path.join(CWD, ".ix")
+
+
+# ==============================
+#  Setup and environment
+# ==============================
 
 
 def init_env():
@@ -17,6 +23,30 @@ def init_env():
         with open(IX_ENV_TEMPLATE, "r") as f:
             with open(IX_ENV_PATH, "w") as f2:
                 f2.write(f.read())
+
+
+def initial_setup(args):
+    """Sets up the IX database on the first run
+
+    While this is safe to run on every startup, it's not necessary and will
+    auto-trigger migrations or re-run fixtures. The main concern is that fixtures
+    will override any changes made to the database.
+    """
+    if os.path.exists(IX_INIT):
+        return
+
+    setup(args)
+    subprocess.run(["touch", IX_INIT])
+
+
+def migrate(args):
+    print("Running IX database migrations")
+    run_manage_py_command("migrate")
+
+
+def setup(args):
+    migrate(args)
+    run_manage_py_command("setup")
 
 
 def get_env(env=None):
@@ -30,6 +60,11 @@ def get_env(env=None):
         **os.environ,
         **(env or {}),
     }
+
+
+# ==============================
+#  Compose helpers
+# ==============================
 
 
 def run_docker_compose_command(subcommand, *args, **kwargs):
@@ -46,11 +81,16 @@ def run_manage_py_command(subcommand, *args):
         "-f",
         DOCKER_COMPOSE_PATH,
         "exec",
-        "app",
+        "web",
         "./manage.py",
         subcommand,
     ] + list(args)
     subprocess.run(cmd, env=env)
+
+
+# ==============================
+#  Server management
+# ==============================
 
 
 def up(args):
@@ -65,7 +105,17 @@ def up(args):
     # destroy static on each startup so that it is always pulled fresh from the
     # container this avoids stale files from a version prior to what is running.
     subprocess.run(["docker", "volume", "rm", "agent_ix_static"])
+
+    # manually pull the image to ensure we have the latest version
+    subprocess.run(["docker", "pull", f"{IMAGE}:{env['IX_IMAGE_TAG']}"])
+
+    # startup the containers
     run_docker_compose_command("up", "-d", env=env)
+
+    # run initial setup - requires app and database are running
+    initial_setup(args)
+
+    # app is ready!
     print_welcome_message(version=env["IX_IMAGE_TAG"])
 
 
@@ -73,9 +123,11 @@ def print_welcome_message(version):
     print("================================================")
     print(f"IX Sandbox ({version}) is running on http://localhost:8000")
     print()
-    print("commands:")
-    print("stop  : ix down")
-    print("scale : ix scale 3")
+    print("---- Management Commands ----")
+    print("stop       : ix down")
+    print("scale      : ix scale 3")
+    print("web log    : ix log web nginx")
+    print("worker log : ix log worker")
 
 
 def down(args):
@@ -94,20 +146,9 @@ def log(args):
     run_docker_compose_command("logs", "--tail=50", "--follow", *services)
 
 
-def migrate(args):
-    print("Running IX database migrations")
-    run_manage_py_command("migrate")
-
-
-def setup(args):
-    migrate(args)
-    # run_manage_py_command('setup')
-    run_manage_py_command("loaddata", "fake_user")
-    run_manage_py_command("loaddata", "node_types")
-    run_manage_py_command(
-        "loaddata",
-        "ix_v2 code_v2 pirate_v1 wikipedia_v1 klarna_v1 bot_smith_v1",
-    )
+# ==============================
+#  Main
+# ==============================
 
 
 def version(args):
