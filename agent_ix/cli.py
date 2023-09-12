@@ -20,7 +20,7 @@ def init_env():
                 f2.write(f.read())
 
 
-def get_env():
+def get_env(env=None):
     init_env()
     nginx_conf = pkg_resources.resource_filename("agent_ix", "nginx.conf")
 
@@ -29,11 +29,13 @@ def get_env():
         "IX_IMAGE_TAG": "latest",
         "IX_ENV": IX_ENV_PATH,
         **os.environ,
+        **(env or {})
     }
 
 
 def run_docker_compose_command(subcommand, *args, **kwargs):
-    env = get_env()
+    runtime_env = kwargs.get("env", {})
+    env = get_env(env=runtime_env)
     cmd = ["docker-compose", "-f", DOCKER_COMPOSE_PATH, subcommand] + list(
         args
     )
@@ -55,12 +57,17 @@ def run_manage_py_command(subcommand, *args):
 
 
 def up(args):
+    env = {}
+    if args.version:
+        env["IX_IMAGE_TAG"] = args.version
+
     # destroy static on each startup so that it is always pulled fresh from the
     # container this avoids stale files from a version prior to what is running.
     subprocess.run(["docker", "volume", "rm", "agent_ix_static"])
     run_docker_compose_command(
         "up",
         "-d",
+        env=env
     )
 
 
@@ -119,8 +126,7 @@ def main():
     parser_up = subparsers.add_parser(
         "up", help="Start services in the background"
     )
-    # parser_up.add_argument('version', help='Version to load (e.g. 0.1)',
-    # default="latest")
+    parser_up.add_argument('--version', type=str, default=None, help='IX sandbox image tag run (e.g. 0.1.1)')
     parser_up.set_defaults(func=up)
 
     # 'down' subcommand

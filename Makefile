@@ -27,14 +27,14 @@ install:          ## Install the project in dev mode.
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
 	$(ENV_PREFIX)isort agent_ix/
-	$(ENV_PREFIX)black -l 79 agent_ix/
-	$(ENV_PREFIX)black -l 79 tests/
+	$(ENV_PREFIX)black -l 98 agent_ix/
+	$(ENV_PREFIX)black -l 98 tests/
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 agent_ix/
-	$(ENV_PREFIX)black -l 79 --check agent_ix/
-	$(ENV_PREFIX)black -l 79 --check tests/
+	$(ENV_PREFIX)black -l 98 --check agent_ix/
+	$(ENV_PREFIX)black -l 98 --check tests/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
