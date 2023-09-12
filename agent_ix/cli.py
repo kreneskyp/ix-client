@@ -93,6 +93,12 @@ def setup(args):
     )
 
 
+def version(args):
+    version = pkg_resources.resource_filename("agent_ix", "VERSION")
+    with open(version, "r") as f:
+        print(f"IX client v{f.read()}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Docker-compose and Django CLI wrapper."
@@ -102,6 +108,12 @@ def main():
         description="Valid subcommands",
         help="Available operations",
     )
+
+    # 'up' subcommand
+    parser_version = subparsers.add_parser(
+        "version", help="report client version"
+    )
+    parser_version.set_defaults(func=version)
 
     # 'up' subcommand
     parser_up = subparsers.add_parser(

@@ -43,7 +43,7 @@ setup(
         "console_scripts": ["ix = agent_ix.__main__:main"]
     },
     package_data={
-        'agent_ix': ['docker-compose.yml', 'nginx.conf', 'ix.env'],
+        'agent_ix': ['docker-compose.yml', 'nginx.conf', 'ix.env', 'VERSION'],
     },
     extras_require={"test": read_requirements("requirements-test.txt")},
 )
