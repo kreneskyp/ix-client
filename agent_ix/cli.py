@@ -100,6 +100,7 @@ def up(args):
 
     print("Starting IX Sandbox")
     print(f"image: {IMAGE}:{env['IX_IMAGE_TAG']}")
+    print(f"env: {IX_ENV_PATH}")
     print("------------------------------------------------")
 
     # destroy static on each startup so that it is always pulled fresh from the
@@ -122,6 +123,9 @@ def up(args):
 def print_welcome_message(version):
     print("================================================")
     print(f"IX Sandbox ({version}) is running on http://localhost:8000")
+    print()
+    print("To set global API keys for OpenAI and other services edit ix.env and restart:")
+    print(IX_ENV_PATH)
     print()
     print("---- Management Commands ----")
     print("stop       : ix down")

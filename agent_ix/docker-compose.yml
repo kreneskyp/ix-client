@@ -21,7 +21,7 @@ services:
       - db
       - redis
     env_file:
-      - ix.env
+      - ${IX_ENV}
     volumes:
       - static:/var/static/
     environment:
@@ -44,7 +44,7 @@ services:
       - db
       - redis
     env_file:
-      - ix.env
+      - ${IX_ENV}
 
   redis:
     image: redis/redis-stack-server:latest
