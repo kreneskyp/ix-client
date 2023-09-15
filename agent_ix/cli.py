@@ -140,6 +140,7 @@ def print_welcome_message(version):
     print()
     print("---- Management Commands ----")
     print("stop       : ix down")
+    print("restart    : ix restart")
     print("scale      : ix scale 3")
     print("web log    : ix log web nginx")
     print("worker log : ix log worker")
@@ -148,6 +149,11 @@ def print_welcome_message(version):
 def down(args):
     print("Stopping IX Sandbox")
     run_docker_compose_command("down")
+
+
+def restart(args):
+    down(args)
+    up(args)
 
 
 def scale(args):
@@ -197,6 +203,10 @@ def main():
         help="Stop and remove containers, networks, images, and volumes",
     )
     parser_down.set_defaults(func=down)
+
+    # 'restart' subcommand
+    parser_restart = subparsers.add_parser("restart", help="Restart all services")
+    parser_restart.set_defaults(func=restart)
 
     # 'scale' subcommand
     parser_scale = subparsers.add_parser("scale", help="Scale agent workers")
