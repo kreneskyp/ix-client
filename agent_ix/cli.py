@@ -178,8 +178,28 @@ def version(args):
         print(f"IX client v{f.read()}")
 
 
+DESCRIPTION = """Agent IX control.
+
+This command line tool is used to manage a local Agent IX cluster. The application
+including frontend, backend, database, and related services are all run in Docker 
+containers. This tool is used to start, stop, and scale the containers.
+
+The ix.env file is used to configure default global keys for OpenAI and other
+services. This file is created on first run and can be edited to set your keys.
+
+This tool will pull and run the IX docker images. By default the `latest` tag will
+be run. To run a specific version of IX, use the --version flag. 
+
+    ix up --version 0.8
+    ix up --version dev
+    ix up --version latest
+"""
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Docker-compose and Django CLI wrapper.")
+    initial_env()
+
+    parser = argparse.ArgumentParser(description=DESCRIPTION, formatter_class=argparse.RawTextHelpFormatter)
     subparsers = parser.add_subparsers(
         title="Subcommands",
         description="Valid subcommands",
