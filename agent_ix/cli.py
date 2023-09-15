@@ -1,8 +1,11 @@
 import argparse
 import os
 import subprocess
+from getpass import getpass
 
 import pkg_resources
+
+from agent_ix.ix_env import IX_ENV
 
 IMAGE = "ghcr.io/kreneskyp/ix/sandbox"
 DOCKER_COMPOSE_PATH = pkg_resources.resource_filename("agent_ix", "docker-compose.yml")
@@ -17,12 +20,22 @@ IX_INIT = os.path.join(CWD, ".ix")
 # ==============================
 
 
-def init_env():
+def initial_env():
     # create ix.env file if it doesn't exist
-    if not os.path.exists(IX_ENV_PATH):
-        with open(IX_ENV_TEMPLATE, "r") as f:
-            with open(IX_ENV_PATH, "w") as f2:
-                f2.write(f.read())
+    if os.path.exists(IX_ENV_PATH):
+        return
+
+    # Initialize to an empty string
+    open_api_key = ""
+
+    # Loop until a non-empty API key is entered
+    while not open_api_key:
+        open_api_key = getpass("Please enter your OpenAI API key (hidden): ")
+        if not open_api_key:
+            print("API key is required.")
+
+    with open(IX_ENV_PATH, "w") as f:
+        f.write(IX_ENV.format(OPENAI_API_KEY=open_api_key))
 
 
 def initial_setup(args):
@@ -36,7 +49,6 @@ def initial_setup(args):
         return
 
     setup(args)
-    subprocess.run(["touch", IX_INIT])
 
 
 def migrate(args):
@@ -45,12 +57,12 @@ def migrate(args):
 
 
 def setup(args):
+    """create database and load fixtures"""
     migrate(args)
     run_manage_py_command("setup")
 
 
 def get_env(env=None):
-    init_env()
     nginx_conf = pkg_resources.resource_filename("agent_ix", "nginx.conf")
 
     return {
@@ -124,8 +136,7 @@ def print_welcome_message(version):
     print("================================================")
     print(f"IX Sandbox ({version}) is running on http://localhost:8000")
     print()
-    print("To set global API keys for OpenAI and other services edit ix.env and restart:")
-    print(IX_ENV_PATH)
+    print("Edit ix.env to set global keys for LLMs and other services.")
     print()
     print("---- Management Commands ----")
     print("stop       : ix down")

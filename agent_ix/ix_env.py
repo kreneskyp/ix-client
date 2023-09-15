@@ -1,12 +1,20 @@
+IX_ENV = """
+# ==================================================================
+# GLOBAL ENVIRONMENT DEFAULTS:
+#
+# These values are set in the environment of app and worker containers
+# They are used by defaults by the corresponding components.
+# ==================================================================
+
+# OpenAI is the default LLM used by predefined agents.
+OPENAI_API_KEY={OPENAI_API_KEY}
+
 # ==================================================================
 # OPTIONAL SETUP:
 #
 # These values are only required when using the corresponding
 # features.
 # ==================================================================
-
-# OpenAI is the default LLM used by predefined agents.
-OPENAI_API_KEY=
 
 # LangSmith logging (requires a LangSmith account)
 # LANGCHAIN_TRACING_V2=true
@@ -29,3 +37,4 @@ WOLFRAM_APP_ID=
 
 # METAPHOR
 METAPHOR_API_KEY=
+"""
