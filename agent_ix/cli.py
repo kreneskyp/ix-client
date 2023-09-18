@@ -50,6 +50,10 @@ def initial_setup(args):
 
     setup(args)
 
+    # create the sentinel file
+    with open(IX_INIT, "w") as f:
+        f.write("")
+
 
 def migrate(args):
     print("Running IX database migrations")
