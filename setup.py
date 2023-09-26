@@ -41,7 +41,7 @@ setup(
     install_requires=read_requirements("requirements.txt"),
     entry_points={"console_scripts": ["ix = agent_ix.__main__:main"]},
     package_data={
-        "agent_ix": ["docker-compose.yml", "nginx.conf", "ix.env", "VERSION"],
+        "agent_ix": ["ix.env", "VERSION"],
     },
     extras_require={"test": read_requirements("requirements-test.txt")},
 )
