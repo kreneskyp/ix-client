@@ -216,7 +216,7 @@ def up(args):
     subprocess.run(["docker", "volume", "rm", "agent_ix_static"])
 
     # manually pull the image to ensure we have the latest version
-    # subprocess.run(["docker", "pull", f"{IMAGE}:{env['IX_IMAGE_TAG']}"])
+    subprocess.run(["docker", "pull", f"{IMAGE}:{env['IX_IMAGE_TAG']}"])
 
     # extract config files from the image using tar. This is done at each startup
     # to ensure the latest config is always used.
