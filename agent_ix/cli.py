@@ -127,10 +127,6 @@ def init_database(args):
     setup(args)
     DATABASE_INIT.touch()
 
-    # create the sentinel file
-    with open(IX_INIT, "w") as f:
-        f.write("")
-
 
 def migrate(args):
     print("Running IX database migrations")
