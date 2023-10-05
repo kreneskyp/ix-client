@@ -317,8 +317,11 @@ def main():
         "--version", type=str, default=None, help="IX sandbox image tag run (e.g. 0.1.1)"
     )
     parser_up.add_argument("--no-pull", action="store_true", help="Do not pull the image")
-    parser_up.add_argument("--local-config", action="store_true",
-                           help="Use the local config files without updating from the image")
+    parser_up.add_argument(
+        "--local-config",
+        action="store_true",
+        help="Use the local config files without updating from the image",
+    )
     parser_up.set_defaults(func=up)
 
     # 'down' subcommand
