@@ -212,12 +212,14 @@ def up(args):
     subprocess.run(["docker", "volume", "rm", "agent_ix_static"])
 
     # manually pull the image to ensure we have the latest version
-    subprocess.run(["docker", "pull", f"{IMAGE}:{env['IX_IMAGE_TAG']}"])
+    if not args.no_pull:
+        subprocess.run(["docker", "pull", f"{IMAGE}:{env['IX_IMAGE_TAG']}"])
 
     # extract config files from the image using tar. This is done at each startup
     # to ensure the latest config is always used.
-    extract_client_config(f"{IMAGE}:{env['IX_IMAGE_TAG']}")
-    init_certificates(f"{IMAGE}:{env['IX_IMAGE_TAG']}")
+    if not args.local_config:
+        extract_client_config(f"{IMAGE}:{env['IX_IMAGE_TAG']}")
+        init_certificates(f"{IMAGE}:{env['IX_IMAGE_TAG']}")
 
     # startup the containers
     run_docker_compose_command("up", "-d", env=env)
@@ -313,6 +315,12 @@ def main():
     parser_up = subparsers.add_parser("up", help="Start services in the background")
     parser_up.add_argument(
         "--version", type=str, default=None, help="IX sandbox image tag run (e.g. 0.1.1)"
+    )
+    parser_up.add_argument("--no-pull", action="store_true", help="Do not pull the image")
+    parser_up.add_argument(
+        "--local-config",
+        action="store_true",
+        help="Use the local config files without updating from the image",
     )
     parser_up.set_defaults(func=up)
 
