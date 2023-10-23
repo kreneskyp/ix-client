@@ -183,7 +183,7 @@ def export_chain(args):
             f"{os.getcwd()}:/tmp/output",
             "web",
             "./manage.py",
-            "export_agent",
+            "dump_agent",
         ]
         if args.id:
             cmd.extend(["-i", str(args.id)])
