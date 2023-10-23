@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 from getpass import getpass
 from pathlib import Path
 from uuid import uuid4
@@ -164,6 +165,51 @@ def extract_client_config(image_url):
     # Use Popen to run the docker command and pipe its output to another tar command
     with subprocess.Popen(cmd, stdout=subprocess.PIPE) as docker_process:
         subprocess.check_call(["tar", "-xC", ".ix"], stdin=docker_process.stdout)
+
+
+# ==============================
+#  Import / Export
+# ==============================
+
+
+def export_chain(args):
+    if args.id or args.alias:
+        cmd = [
+            "docker-compose",
+            "-f",
+            DOCKER_COMPOSE_PATH,
+            "run",
+            "--volume",
+            f"{os.getcwd()}:/tmp/output",
+            "web",
+            "./manage.py",
+            "export_agent",
+        ]
+        if args.id:
+            cmd.extend(["-i", str(args.id)])
+        elif args.alias:
+            cmd.extend(["-a", args.alias])
+        cmd.extend(["-o", "/tmp/output"])
+        subprocess.run(cmd, env=get_env())
+    else:
+        print("Please provide either the ID or the alias of the Agent.")
+        sys.exit(1)
+
+
+def import_chain(args):
+    cmd = [
+        "docker-compose",
+        "-f",
+        DOCKER_COMPOSE_PATH,
+        "exec",
+        "-v",
+        f"{args.file_path}:/var/fixture.json",
+        "web",
+        "./manage.py",
+        "loaddata",
+        "/tmp/fixture.json",
+    ]
+    subprocess.run(cmd, env=get_env())
 
 
 # ==============================
@@ -355,6 +401,17 @@ def main():
     # 'setup' subcommand
     parser_setup = subparsers.add_parser("setup", help="Initialize database and load fixtures")
     parser_setup.set_defaults(func=setup)
+
+    # 'import' subcommand
+    parser_import = subparsers.add_parser("import", help="Import chain/agent")
+    parser_import.add_argument("file", type=str, help="Path to the file to import")
+    parser_import.set_defaults(func=import_chain)
+
+    # 'export' subcommand
+    parser_export = subparsers.add_parser("export", help="Export chain/agent")
+    parser_export.add_argument("-a", "--alias", type=str, help="Alias of the Agent")
+    parser_export.add_argument("-i", "--id", type=int, help="ID of the Agent")
+    parser_export.set_defaults(func=export_chain)
 
     args = parser.parse_args()
 
